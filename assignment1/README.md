@@ -1,7 +1,5 @@
 ---
-title: "README"
-author: "Clay Martin"
-date: "3/25/2019"
+title: "Assignment 1"
 output: 
   html_document: 
     keep_md: yes
@@ -34,6 +32,6 @@ summary(cars)
 
 You can also embed plots, for example:
 
-![](README_files/figure-html/pressure-1.png)<!-- -->
+![](readme_files/figure-html/pressure-1.png)<!-- -->
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
