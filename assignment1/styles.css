@@ -1,3 +1,10 @@
 p {
   max-width: 75%;
+  font-family: "Goudy Old Style", Garamond, serif;
+  font-size: 150%;
+}
+
+ol {
+  font-size: 150%;
+  max-width: 75%;
 }

@@ -255,6 +255,12 @@ h6 {
 
 <style type="text/css">p {
 max-width: 75%;
+font-family: "Goudy Old Style", Garamond, serif;
+font-size: 150%;
+}
+ol {
+font-size: 150%;
+max-width: 75%;
 }</style>
 
 </head>
@@ -348,6 +354,17 @@ else:
 <div id="neural-network-basics" class="section level1">
 <h1>2 Neural Network Basics</h1>
 <ol style="list-style-type: decimal">
+<li><strong>Derive the gradients of the sigmoid function and show that it can be rewritten as a function of the function value</strong></li>
+</ol>
+<p>The only “trick” here is the addition and subtraction of <span class="math inline">\(e^{-x}\)</span> in line 3.</p>
+<p><span class="math display">\[\begin{aligned}
+    \sigma\prime(x) &amp;= \frac{e^{-x}}{(1+e^{-x})^2} \\
+                    &amp;= \frac{e^{-x}}{1+e^{-x}} \cdot \frac{1}{1+e^{-x}} \\
+                    &amp;= \frac{e^{-x}}{1+e^{-x}} \cdot \frac{1+e^{-x}-e^{-x}}{1+e^{-x}} \\
+                    &amp;= \sigma(x)(1 - \sigma(x))
+  \end{aligned}
+\]</span></p>
+<ol start="2" style="list-style-type: decimal">
 <li><strong>Derive the gradient with regard to the inputs of a softmax function when cross entropy loss is used for evaluation</strong></li>
 </ol>
 <p>This gradient is the first step in the back-propagation of our neural network. Every other gradient we calculate during backprop will contain this gradient as a factor. As the hint points out, <span class="math inline">\(y\)</span> is a one-hot vector, so the only term <span class="math inline">\(j\)</span> that contributes to the gradient is where <span class="math inline">\(y_j\)</span> = 1. All other terms are zero. This simplifies the expressions to</p>
@@ -366,7 +383,7 @@ else:
   \end{aligned}
 \]</span></p>
 <p>For <span class="math inline">\(k \neq j\)</span>, the only difference is that the term <span class="math inline">\(-1\)</span> is instead <span class="math inline">\(0\)</span>, so the gradient is just <span class="math inline">\(softmax(\theta)_k\)</span>. Putting all gradients together in vector notation, we get <span class="math inline">\(\frac{\partial{CE(y,\hat{y})}} {\partial{\theta}} = \hat{y} - y\)</span>.</p>
-<ol start="2" style="list-style-type: decimal">
+<ol start="3" style="list-style-type: decimal">
 <li><strong>Derive the gradients with respect to the inputs x to an one-hidden-layer neural network</strong></li>
 </ol>
 <p>Book keeping is really important here, both conceptually and computationly. Conceptually, it will help to break out the applications of the chain rule into manageable chunks. Computationly, it shows what computations can be stored and re-used later. So we’ll start by writing down all the intermediate variables we’ll need. Going from the output layer to the input layer, we have:</p>
@@ -386,7 +403,19 @@ else:
     \end{aligned}
 \]</span></p>
 <p>Notice how some values computed during forward propagation, such as <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\hat{y}\)</span>, are re-used during backprop. Also note that the derivative of a function that is applied element-wise during forward propagation is multiplied element-wise during backprop, as indicated by the Hadamard product (<span class="math inline">\(\circ\)</span>).</p>
-<p>Let’s take a moment to appreciate the oddness of this question. After all, in the backprop algorithm we don’t calculate the gradient w.r.t. the input data, x, which we consider to be fixed. Rather, the gradient is calculated w.r.t. the <em>parameters</em> <span class="math inline">\(W_1, b_1, W_2, b_2\)</span>. Put another way, it’s the parameter values that we adjust via backprop and gradient descent, in order to minimize the loss function. Indeed, when we implement backprop below, we do so in terms of the parameter gradients. The work we’ve done in this problem is not used.</p>
+<p>Let’s take a moment to appreciate the oddness of this problem. After all, in the backprop algorithm we don’t calculate the gradient w.r.t. the input data, x, which we consider to be fixed. Rather, the gradient is calculated w.r.t. the <em>parameters</em> <span class="math inline">\(W_1, b_1, W_2, b_2\)</span>. Put another way, it’s the parameter values that we adjust, via backprop and gradient descent, in order to minimize the loss function. Indeed, when we implement backprop below, we do so in terms of the parameter gradients. The work we’ve done in this problem is not used. Sad!</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>How many parameters are there in this neural network?</strong></li>
+</ol>
+<p>The number of parameters is given by the number of elements in the matrices <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span>, and in the vertices <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span>. Assume the input has dimension <span class="math inline">\(D_x\)</span>, the output dimension <span class="math inline">\(D_y\)</span>, and their are <span class="math inline">\(H\)</span> hidden units. The matrix <span class="math inline">\(W_1\)</span> maps the inputs to the hidden units, so its dimensions must by <span class="math inline">\(D_x \times H\)</span>. The vector <span class="math inline">\(b_1\)</span> is added to <span class="math inline">\(xW_1\)</span> row-wise, so it must have <span class="math inline">\(D_x\)</span> elements. Similary reasoning shows that <span class="math inline">\(W_2\)</span> has dimensions <span class="math inline">\(H \times D_y\)</span> and $b_2 has <span class="math inline">\(D_y\)</span> elements. Total parameters are therefore</p>
+<p><span class="math display">\[ D_x \cdot H + H + H \cdot D_y + D_y = H \cdot (D_x + D_y + 1) + D_y\]</span></p>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Implement the sigmoid activation function</strong></li>
+</ol>
+<p>This is very straigthforward. Given the vector <code>x</code>, the sigmoid is calcuated by</p>
+<pre class="python"><code>s = 1./(1 + np.exp(-x))</code></pre>
+<p>Given a function value <code>s</code> of the sigmoid, the gradient is given by</p>
+<pre class="python"><code>ds = s*(1 - s)</code></pre>
 </div>
 
 

@@ -32,16 +32,14 @@ def gradcheck_naive(f, x):
 
             
         ### YOUR CODE HERE:
-        
-        random.setstate(rndstate)
         xh = x
         xh[ix] = xh[ix] + h
         random.setstate(rndstate)
         fxh1, gradh = f(xh)
         xh[ix] = xh[ix] - 2*h
+        random.setstate(rndstate)
         fxh2, gradh = f(xh)
         numgrad = (fxh1 - fxh2)/(2*h)
-            
         ### END YOUR CODE
 
         # Compare gradients
@@ -79,7 +77,7 @@ def your_sanity_checks():
     """
     print ("Running your sanity checks...")
     ### YOUR CODE HERE
-    raise NotImplementedError
+    # raise NotImplementedError
     ### END YOUR CODE
 
 
