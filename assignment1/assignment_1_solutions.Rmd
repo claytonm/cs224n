@@ -256,7 +256,7 @@ We begin by normalizing the rows of a matrix to have unit length, with the code 
 A plot of our trained word vectors is below. If anything, it appears that our vectors are co-locating antonyms, such as amazing/waste, boring/great, enjoyable/annoying.
 
 ```{r firstgraph, echo=FALSE}
-knitr::include_graphics("./q3_word_vectors.png")
+knitr::include_graphics("./q3_word_vectors.png", dpi=200)
 ```
 
 # 4 Sentiment Analysis
@@ -282,13 +282,35 @@ We achieve 37% accuracy using pre-trained vectors, and only 28% accuracy using o
 Model complexity decreases as regularization increases. We can see that our model overfits without regularization, because the generalization error (orange line) increases as regularization increases. What is unexpected is that our training error also declines as model complexity declines.  
 
 ```{r secondgrapu, echo=FALSE}
-knitr::include_graphics("./q4_reg_v_acc.png")
+knitr::include_graphics("./q4_reg_v_acc.png", dpi=200)
 ```
 
+6. **Interpret the confusion matrix associated with the GloVe vectors**
 
+The classifier overclassifies sentences as slightly positive (+), with 500 marked + even though the true number is less than 300. The single worst misclassification label are the 111 sentences marked + that are in fact -. Neutral sentences have the lowest recall rate. 
 
+```{r glovevecs, echo=FALSE}
+knitr::include_graphics("./q4_dev_conf.png", dpi=200)
+```
 
+7. **Interpret the confusion matrix associated with the GloVe vectors**
 
+Example 1: Predicted = 1, True = 3
 
+``and if you 're not nearly moved to tears by a couple of scenes , you 've got ice water in your veins .``
+
+This is a neutral sentence that we've classified as very negative. The bag-of-words model can't capture the syntactic dependence of sentiment. Here, the average is influenced by the strong negativity of tears. 
+
+Example 2: Predicted = 1, True = 2
+``half submarine flick , half ghost st
+ory , all in one criminally neglected film``
+
+Again, ``criminally`` is a highly negative word, and the bag-of-words model cannot tell that it is modifying ``neglected``.
+
+Example 3: Prediced: 1, True: 3
+
+``whether you like rap music or loathe it , you ca n't deny either the tragic loss of two young men in the prime of their talent or the power of this movie .``
+
+``loathe`` is a negative word used here to underscore the movie's universal appeal, not express loathing. 
 
 
