@@ -71,3 +71,22 @@ $$\gamma = \frac{1}{1-p_{drop}}$$.
 7.1. By setting the update parameters to be the (weighted) average of the gradients at the current step, plus the rolling average of the gradients at all previous steps, Adam reduces the influence of the latest gradient values on the update. This slows down the learning rate as training proceeds, thus reducing variation in later trainig epochs.
 
 7.2. Dividing by the rolling average of the magnitude of the gradient has the effect of reducing the impact of gradient components with high magnitudes. This prevents dimensions with high gradient magnitudes from domininating the learning process.
+
+# 3 Recurrent Neural Newtworks: Language Modeling
+
+1. **Argue equivalence of cross-entropy loss and perplexity**
+
+In $CE\left( \bf{y}^{(t)}, \bf{\hat{y}^{(t)}}\right)$, only the dimension $k$ corresponding to the correct class is non-zero, so
+
+$$
+\begin{aligned}
+    -\sum \bf{y}_{j}^{(t)} \log{\bf{\hat{y}}_{j}^{(t)}} &= -\log\bf{\hat{y}}_{k}^{(t)} \\
+    &= \log \frac{1}{\bf{\hat{y}}_{k}^{(t)}}
+\end{aligned}
+$$
+
+This shows that $CE$ is the $log$ of perplexity. Since the $log$ is a monotonic function, maximizing $CE$ also maximizes perplexity.
+
+With a vocabulary of size 10,000 and random guessin, perplexity would be $\frac{1}(10,000)$ and cross-entropy would be $\log \frac{1}{10,000}.
+
+2. 
